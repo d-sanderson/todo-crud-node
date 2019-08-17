@@ -19,36 +19,6 @@ app.get('/',(req,res)=>{
   res.sendFile(path.join(__dirname,'index.html'));
 });
 
-// read
-app.get('/getTodos',(req,res)=>{
-  // get all Todo documents within our todo collection
-  // send back to user as json
-  db.getDB().collection(collection).find({}).toArray((err,documents)=>{
-      if(err)
-          console.log(err);
-      else{
-          res.json(documents);
-      }
-  });
-});
-
-// update
-app.put('/:id',(req,res)=>{
-  // Primary Key of Todo Document we wish to update
-  const todoID = req.params.id;
-  // Document used to update
-  const userInput = req.body;
-  // Find Document By ID and Update
-  db.getDB().collection(collection).findOneAndUpdate({_id : db.getPrimaryKey(todoID)},{$set : {todo : userInput.todo}},{returnOriginal : false},(err,result)=>{
-      if(err)
-          console.log(err);
-      else{
-          res.json(result);
-      }
-  });
-});
-
-
 //create
 app.post('/',(req,res,next)=>{
   // Document to be inserted
@@ -77,7 +47,34 @@ app.post('/',(req,res,next)=>{
   })
 });
 
+// read
+app.get('/getTodos',(req,res)=>{
+  // get all Todo documents within our todo collection
+  // send back to user as json
+  db.getDB().collection(collection).find({}).toArray((err,documents)=>{
+      if(err)
+          console.log(err);
+      else{
+          res.json(documents);
+      }
+  });
+});
 
+// update
+app.put('/:id',(req,res)=>{
+  // Primary Key of Todo Document we wish to update
+  const todoID = req.params.id;
+  // Document used to update
+  const userInput = req.body;
+  // Find Document By ID and Update
+  db.getDB().collection(collection).findOneAndUpdate({_id : db.getPrimaryKey(todoID)},{$set : {todo : userInput.todo}},{returnOriginal : false},(err,result)=>{
+      if(err)
+          console.log(err);
+      else{
+          res.json(result);
+      }
+  });
+});
 
 //delete
 app.delete('/:id',(req,res)=>{
